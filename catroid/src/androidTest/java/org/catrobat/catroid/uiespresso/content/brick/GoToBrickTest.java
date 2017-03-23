@@ -20,27 +20,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.uiespresso.formulaeditor;
+
+package org.catrobat.catroid.uiespresso.content.brick;
 
 import android.support.test.runner.AndroidJUnit4;
 
 import org.catrobat.catroid.R;
+import org.catrobat.catroid.content.bricks.GoToBrick;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.uiespresso.util.BaseActivityInstrumentationRule;
-import org.catrobat.catroid.uiespresso.util.UiTestUtils;
-import org.catrobat.catroid.uiespresso.util.actions.CustomActions;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.catrobat.catroid.uiespresso.content.brick.BrickTestUtils.checkIfBrickAtPositionShowsString;
+import static org.catrobat.catroid.uiespresso.content.brick.BrickTestUtils.checkIfSpinnerOnBrickAtPositionShowsString;
+import static org.catrobat.catroid.uiespresso.content.brick.BrickTestUtils.clickAndSelectFromSpinnerOnBrickAtPosition;
 
 @RunWith(AndroidJUnit4.class)
-public class FormulaEditorTest {
+public class GoToBrickTest {
+	private int brickPosition;
 
 	@Rule
 	public BaseActivityInstrumentationRule<ScriptActivity> baseActivityTestRule = new
@@ -48,24 +48,22 @@ public class FormulaEditorTest {
 
 	@Before
 	public void setUp() throws Exception {
-		UiTestUtils.createProject("formulaEditorInputTest");
+		BrickTestUtils.createProjectAndGetStartScript("goToBrickTest1").addBrick(new GoToBrick());
+		brickPosition = 1;
 		baseActivityTestRule.launchActivity(null);
 	}
 
 	@Test
-	public void numericValuesTest() {
-		onView(withId(R.id.brick_set_variable_edit_text))
-				.perform(click());
+	public void goToBrickTest() {
+		checkIfBrickAtPositionShowsString(0, R.string.brick_when_started);
+		checkIfBrickAtPositionShowsString(brickPosition, R.string.brick_go_to);
 
-		//typeText not working for formula editor, so use CustomActions.typeInValue
-		onView(withId(R.id.formula_editor_edit_field))
-				.perform(CustomActions.typeInValue("12345,678"));
+		checkIfSpinnerOnBrickAtPositionShowsString(R.id.brick_go_to_spinner, brickPosition, R.string
+				.brick_go_to_touch_position);
 
-		onView(withId(R.id.formula_editor_keyboard_ok))
-				.perform(click());
-	}
+		clickAndSelectFromSpinnerOnBrickAtPosition(R.id.brick_go_to_spinner, brickPosition, R.string
+				.brick_go_to_random_position);
 
-	@After
-	public void tearDown() throws Exception {
+		checkIfSpinnerOnBrickAtPositionShowsString(R.id.brick_go_to_spinner, brickPosition, R.string.brick_go_to_random_position);
 	}
 }

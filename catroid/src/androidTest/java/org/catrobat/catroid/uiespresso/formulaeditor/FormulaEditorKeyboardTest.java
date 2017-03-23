@@ -35,6 +35,7 @@ import org.catrobat.catroid.formulaeditor.DataContainer;
 import org.catrobat.catroid.formulaeditor.UserVariable;
 import org.catrobat.catroid.ui.ScriptActivity;
 import org.catrobat.catroid.uiespresso.util.BaseActivityInstrumentationRule;
+import org.catrobat.catroid.uiespresso.util.UiTestUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -81,7 +82,8 @@ public class FormulaEditorKeyboardTest {
 		onView(withId(R.id.formula_editor_keyboard_ok)).perform(click());
 
 		onView(withId(R.id.formula_editor_edit_field))
-				.check(matches(withText("1234567890.1 ")));
+				.check(matches(withText("1234567890"
+						+ UiTestUtils.getResourcesString(R.string.formula_editor_decimal_mark) + "1 ")));
 	}
 
 	@Test
@@ -109,15 +111,20 @@ public class FormulaEditorKeyboardTest {
 
 	@Test
 	public void enterStringTest() {
-		onView(withId(R.id.brick_set_variable_edit_text)).perform(click());
+		onView(withId(R.id.brick_set_variable_edit_text))
+				.perform(click());
+		onView(withId(R.id.formula_editor_keyboard_string))
+				.perform(click());
 
-		onView(withId(R.id.formula_editor_keyboard_string)).perform(click());
+		onView(withText(R.string.formula_editor_new_string_name))
+				.check(matches(isDisplayed()));
+		onView(withId(R.id.formula_editor_string_name_edit_text))
+				.perform(typeText("Foo"));
+		onView(withText(R.string.ok))
+				.perform(click());
 
-		onView(withText(R.string.formula_editor_new_string_name)).check(matches(isDisplayed()));
-		onView(withId(R.id.formula_editor_string_name_edit_text)).perform(typeText("Foo"));
-		onView(withText(R.string.ok)).perform(click());
-
-		onView(withId(R.id.formula_editor_keyboard_ok)).perform(click());
+		onView(withId(R.id.formula_editor_keyboard_ok))
+				.perform(click());
 		onView(withId(R.id.formula_editor_edit_field))
 				.check(matches(withText("'Foo' ")));
 	}

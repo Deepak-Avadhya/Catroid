@@ -1432,6 +1432,13 @@
     </plurals>
     <!--  -->
 
+    <!-- New Data Dialog -->
+    <string name="user_variablename_already_exists">Please choose another variable name.</string>
+    <string name="user_listname_already_exists">Please choose another list name.</string>
+    <string name="no_variablename_entered">Please enter a variable name.</string>
+    <string name="no_listname_entered">Please enter a list name.</string>
+    <!-- -->
+
     <!-- Brick Data Editor Strings -->
     <string name="brick_data_editor_title">Brick editor</string>
     <string name="separator">|</string>
